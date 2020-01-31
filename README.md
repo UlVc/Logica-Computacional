@@ -1,2 +1,2 @@
-# L-gica-Computacional
+# Lógica-Computacional
 Prácticas de Laboratorio.
