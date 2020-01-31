@@ -47,8 +47,14 @@ pertenece :: Natural -> ListaNat-> Bool
 pertenece n l = case l of (Cons m x) -> if (iguales n m) then True else pertenece n x 
                           _ -> False
 
---inOrden :: BTree a -> a
---inOrden ab = case ab of (Node (BTree a) b (BTree c)) -> b
+inOrden :: BTree a -> [a]
+inOrden b = case b of Void -> []
+                      Node Void e Void -> [e]
+                      Node x e y -> inOrden x ++ [e] ++ inOrden y
+
+agregaOrden :: (Ord a) => BTree a -> a -> BTree a
+agregaOrden a e = case a of Void -> Node Void e Void
+                            Node x el y -> if (e >= el) then Node x el (agregaOrden y e) else Node (agregaOrden x e) el y
 
 tailSnoc :: ListaSnoc a -> ListaSnoc a
 tailSnoc l = case l of Empty -> error "No se permiten listas vacias."
