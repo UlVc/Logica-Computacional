@@ -71,10 +71,13 @@ module Practica1 where
   longitud x = longAux x 10 1
 
   longAux :: (Ord a, Integral a) => a -> a -> a -> a
-  longAux x d c = if (div x d >= 1) then longAux x (d*10) (c + 1) else c
+  longAux x d c
+      | div x d >= 1 = longAux x (d*10) (c + 1)
+      | otherwise = c
 
   tribonaccies :: Int -> [Int]
-  tribonaccies n = [0, 0, 1] ++ tAux n 0 0 1
+  tribonaccies n = map (tribonacciAux) ([0..n+1])
 
-  tAux :: Int -> Int -> Int -> Int -> [Int]
-  tAux n a b c = if (n > 1) then [a+b+c] ++ (tAux (n-1) b c (a+b+c)) else []
+  tribonacciAux :: Int -> Int
+  tribonacciAux n = case n of 0 -> 0; 1 -> 0; 2 -> 1; otherwise -> tribonacciAux(n-1) + tribonacciAux(n-2) + tribonacciAux(n-3)
+
