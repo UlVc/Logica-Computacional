@@ -34,16 +34,19 @@ module Practica1 where
   mul a b c = case b of (Suc n) -> mul (sumaNat a c) n c
                         otherwise -> a
 
+  concatena :: ListaNat -> ListaNat -> ListaNat
+  concatena l1 l2 = concatenaAux (reversa l1) l2
+
+  concatenaAux :: ListaNat -> ListaNat -> ListaNat
+  concatenaAux l1 l2 = case l1 of Cons n x -> concatenaAux x $ Cons n l2
+                                  _-> l2
+
   reversa :: ListaNat -> ListaNat
   reversa l = reversaAux l Nil
 
   reversaAux :: ListaNat -> ListaNat -> ListaNat
-  reversaAux l1 l2 = case l1 of (Cons n x) -> reversaAux x (Cons n l2)
+  reversaAux l1 l2 = case l1 of (Cons n x) -> reversaAux x $ Cons n l2
                                 _ -> l2
- 
-  concatena :: ListaNat -> ListaNat -> ListaNat
-  concatena l1 l2 = case l2 of (Cons n x) -> concatena (Cons n l1) x
-                               _ -> l1
 
   perteneceNat :: Natural -> ListaNat-> Bool
   perteneceNat n l = case l of (Cons m x) -> if (iguales n m) then True else perteneceNat n x 
@@ -72,12 +75,15 @@ module Practica1 where
 
   longAux :: (Ord a, Integral a) => a -> a -> a -> a
   longAux x d c
-      | div x d >= 1 = longAux x (d*10) (c + 1)
+      | div x d >= 1 = longAux x (d*10) (c+1)
       | otherwise = c
 
   tribonaccies :: Int -> [Int]
   tribonaccies n = map (tribonacciAux) ([0..n+1])
 
   tribonacciAux :: Int -> Int
-  tribonacciAux n = case n of 0 -> 0; 1 -> 0; 2 -> 1; otherwise -> tribonacciAux(n-1) + tribonacciAux(n-2) + tribonacciAux(n-3)
+  tribonacciAux n = case n of 0 -> 0
+                              1 -> 0
+                              2 -> 1
+                              _ -> tribonacciAux(n-1) + tribonacciAux(n-2) + tribonacciAux(n-3)
 
