@@ -24,9 +24,9 @@ l20 = mapSnoc (+25)  (Snoc (Snoc (Snoc Empty 10) 15) 20)
 
 
 -- Puntos Extra
---p1 = longitud 20
---p2 = longitud 1997
---p3 = tribonaccies 5
---p4 = tribonaccies 10
+p1 = longitud 20
+p2 = longitud 1997
+p3 = tribonaccies 5
+p4 = tribonaccies 10
 
 
