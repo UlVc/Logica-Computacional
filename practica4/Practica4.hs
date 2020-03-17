@@ -6,19 +6,19 @@ import SintaxisPLI
 -- Función que nos dice si una formula de PLI cumple el Axioma 1
 esAxL1 :: PLI -> Bool
 esAxL1 f = case f of
-  phi `Imp` h -> case h of Imp _ x -> x == phi
+  phi `Imp` h -> case h of Imp _ x -> x == phi; _-> False
   _ -> False
 
 -- Función que nos dice si una formula de PLI cumple el Axioma 2
 esAxL2 :: PLI -> Bool
 esAxL2 f = case f of
-  g `Imp` h -> case g of phi `Imp` (psi `Imp` chi) -> case h of (x `Imp` y) `Imp` (a `Imp` z) -> (x == phi) && (y == psi) && (z == chi) && (a == phi)
+  g `Imp` h -> case g of phi `Imp` (psi `Imp` chi) -> case h of (x `Imp` y) `Imp` (a `Imp` z) -> (x == phi) && (y == psi) && (z == chi) && (a == phi); _ -> False
   _ -> False
 
 -- Función que nos dice si una formula de PLI cumple el Axioma 3
 esAxL3 :: PLI -> Bool
 esAxL3 f = case f of
-  g `Imp` h -> case g of ((Var n) `Imp` F) `Imp` ((Var m) `Imp` F) -> case h of (Var x) `Imp` (Var y) -> (n == y) && (m == x)
+  g `Imp` h -> case g of ((Var n) `Imp` F) `Imp` ((Var m) `Imp` F) -> case h of (Var x) `Imp` (Var y) -> (n == y) && (m == x); _ -> False
   _ -> False
 
 -- Función que nos dice si una formula es una Axioma del sistema L
