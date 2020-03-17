@@ -14,7 +14,7 @@ data LP = T
 
 varForm :: LP -> [Indice]
 varForm phi = case phi of Var q -> [q]
-                          Neg alpha -> map (\x -> -x) $ varForm alpha
+                          Neg alpha -> map (\x -> -x) $ varForm alpha 
                           And alpha beta -> varForm alpha `union` varForm beta
                           Or alpha beta -> varForm alpha `union` varForm beta
                           Imp alpha beta -> varForm alpha `union` varForm beta
@@ -23,10 +23,12 @@ varForm phi = case phi of Var q -> [q]
 clausulasDNF :: LP -> [[Indice]]
 clausulasDNF phi = case phi of Or alpha beta -> clausulasDNF alpha `union` clausulasDNF beta
                                And alpha beta -> [varForm alpha `union` varForm beta]
+                               Neg alpha -> [varForm $ Neg alpha]
 
 clausulasCNF :: LP -> [[Indice]]
 clausulasCNF phi = case phi of And alpha beta -> clausulasCNF alpha `union` clausulasCNF beta
                                Or alpha beta -> [varForm alpha `union` varForm beta]
+                               Neg alpha -> [varForm $ Neg alpha]
 
 buscaNegAux :: [Indice] -> Bool
 buscaNegAux [] = False
@@ -109,9 +111,36 @@ fnd :: LP -> LP
 fnd phi = distrDNF phi
 
 valCNF :: LP -> Bool
-valCNF phi = (True `elem` l) && (length l == 1)
+valCNF phi = (esCNF phi) && (True `elem` l) && (length l == 1)
     where l = nub $ buscaNeg $ clausulasCNF phi
 
 satDNF :: LP -> Bool
-satDNF phi = True `elem` l
+satDNF phi = (esDNF phi) && (True `elem` l)
     where l = map not $ buscaNeg $ clausulasDNF phi
+
+varFormAux :: LP -> [Indice]
+varFormAux phi = case phi of Var q -> [q]
+                             Neg alpha -> case alpha of Var x -> [-x]; _ -> []
+                             And alpha beta -> varFormAux alpha `union` varFormAux beta
+                             Or alpha beta -> varFormAux alpha `union` varFormAux beta
+                             _ -> []
+
+clausulasCNFAux :: LP -> [[Indice]]
+clausulasCNFAux phi = case phi of And alpha beta -> clausulasCNFAux alpha `union` clausulasCNFAux beta
+                                  Or alpha beta -> [varFormAux alpha `union` varFormAux beta]
+                                  Neg alpha -> case alpha of Var x -> [[-x]]; _ -> []
+                                  _ -> []
+
+esCNF :: LP -> Bool
+esCNF phi = l == varForm phi
+    where l = concat $ clausulasCNFAux phi
+
+clausulasDNFAux :: LP -> [[Indice]]
+clausulasDNFAux phi = case phi of Or alpha beta -> clausulasDNFAux alpha `union` clausulasDNFAux beta
+                                  And alpha beta -> [varFormAux alpha `union` varFormAux beta]
+                                  Neg alpha -> case alpha of Var x -> [[-x]]; _ -> []
+                                  _ -> []
+
+esDNF :: LP -> Bool
+esDNF phi = l == varForm phi
+    where l = concat $ clausulasDNFAux phi
