@@ -25,27 +25,14 @@ move(state(X, on(Y, NewY), OldZ), state(X, NewY, on(Y, OldZ))).
 move(state(OldX, Y, on(Z, NewZ)), state(on(Z, OldX), Y, NewZ)).
 move(state(X, OldY, on(Z, NewZ)), state(X, on(Z, OldY), NewZ)).
 
-path(state(X, Y, Z), state(X, Y, Z)).
-path(state(X, Y, Z), state(X1, Y1, Z1)) :-
-    findall(A, move(state(X, Y, Z), A), [L|LS]),
-    path_aux(state(X, Y, Z), state(X1, Y1, Z1), [L|LS], LS, L).
 
-path_aux(state(X,Y,Z), state(X1, Y1, Z1), [C|CS], [L|LS], state(X1, Y1, Z1)).
-path_aux(state(X,Y,Z), state(X1, Y1, Z1), [C|CS], [L|LS], state(X,Y,Z)) :-
-    head(LS, Head),
-    path_aux(state(X,Y,Z), state(X1, Y1, Z1), CS, LS, Head).
-path_aux(state(X,Y,Z), state(X1, Y1, Z1), [C|CS], [L|LS], state(XM, YM, ZM)) :-
-    path_aux(state(X,Y,Z), state(X1, Y1, Z1), [C|CS], LS, L).
-path_aux(state(X,Y,Z), state(X1, Y1, Z1), [C|CS], [], state(XM, YM, ZM)) :-
-    encontrar_caminos([C|CS], [N|NS]),
-    path_aux(state(X,Y,Z), state(X1, Y1, Z1), [N|NS], NS, N).
+path(X, X, []).
+path(X, Y, List) :-
+    path_aux(X, Y, List1),
+    List = [X|List1].
 
-encontrar_caminos([], []).
-encontrar_caminos([C|CS], XS) :-
-    maplist(encontrar, [C|CS], [Z|ZS]),
-    flatten([Z|ZS], XS).
-
-encontrar(X, List) :-
-    findall(A, move(C, A), List).
-
-%path(state(on(c,on(b,on(a,void))), void, void), state(void, void, on(c,on(a,on(b,void))))).
+path_aux(X, X, []).
+path_aux(X, Y, [Z|ZS]):- 
+    length([Z|ZS], _),
+    move(X, Z), 
+    path_aux(Z, Y, ZS).
