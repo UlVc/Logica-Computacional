@@ -36,3 +36,16 @@ path_aux(X, Y, [Z|ZS]):-
     length([Z|ZS], _),
     move(X, Z), 
     path_aux(Z, Y, ZS).
+
+/* path(state(on(c,on(b,on(a,void))), void, void),
+        state(void, void, on(c,on(a,on(b,void)))),
+        X).
+    
+    X = [state(on(c, on(b, on(a, void))), void, void), 
+         state(on(b, on(a, void)), on(c, void), void), 
+         state(on(a, void), on(c, void), on(b, void)), 
+         state(void, on(c, void), on(a, on(b, void))), 
+         state(void, void, on(c, on(a, on(b, void))))]
+
+Nota: En el pdf de la práctica 7 se pide la lista al revés, ya que creo que es más intuitivo debido a que se empieza desde el inicio (X) y termina hasta llegar a la meta (Y).
+*/
