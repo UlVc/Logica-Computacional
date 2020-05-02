@@ -47,5 +47,6 @@ path_aux(X, Y, [Z|ZS]):-
          state(void, on(c, void), on(a, on(b, void))), 
          state(void, void, on(c, on(a, on(b, void))))]
 
-Nota: En el pdf de la práctica 7 se pide la lista al revés, ya que creo que es más intuitivo debido a que se empieza desde el inicio (X) y termina hasta llegar a la meta (Y).
+Nota: En el pdf de la práctica 7 se pide la lista al revés, pero mi programa no la pone así, ya que creo que es más intuitiva 
+la manera en que path devuelve la lista debido a que se empieza desde el inicio (X) y termina hasta llegar a la meta (Y).
 */
